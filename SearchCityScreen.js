@@ -1,42 +1,39 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import * as React from 'react';
+import { Button, View, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
+import { Searchbar } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Text } from 'react-native-elements';
 
-import NumberContainer from '../components/NumberContainer';
-import Card from '../components/Card';
+function SearchCityScreen({ route, navigation }) {
 
-const generateRandomBetween = (min, max, exclude) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  const rndNum = Math.floor(Math.random() * (max-min)) + min;
-  if (rndNum === exclude) {
-    return generateRandomBetween(min, max, exclude);
-  } else {
-    return rndNum;
-  }
-};
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const onChangeSearch = query => setSearchQuery(query);
 
-const SearchCityScreen = props => {
-  const [currentGuess, setCurrentGuess] = useState(
-    generateRandomBetween(1, 100, props.userChoice)
-  );
+  // const [isLoading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
 
   return (
-    <View>
-      <Text>Opponent's Guess</Text>
-      <NumberContainer>{currentGuess}</NumberContainer>
-        <Card>
-          <Button title="Enter a city" onPress={() => {}}/>
-        </Card>
+    <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }} >
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text h2 >SEARCH BY {"\n"}CITY</Text>
+      <View style={styles.space2} />
+      <Searchbar
+        placeholder="Enter a city"
+        onChangeText={onChangeSearch}
+        value={searchQuery}
+        onIconPress={() => navigation.push('ShowPopulation', {
+          itemId: searchQuery })}
+      />
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    padding: 10,
-    alignItems: 'center'
+  space2: {
+    height: 100
   }
-});
+})
 
 export default SearchCityScreen;
